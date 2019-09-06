@@ -1,6 +1,6 @@
 # yt-downloader
 
-Youtube Video Downloader
+Youtube Video Downloader API
 
 ## Request & Response Examples
 
