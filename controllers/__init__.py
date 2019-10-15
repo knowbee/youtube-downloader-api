@@ -10,37 +10,47 @@ import time
 
 # Function to get video links
 
-endpoint = ""
+url = ""
 def getVideo(link):
   options = Options()
   options.add_argument("--headless")
   options.add_argument("--disable-notifications")
   options.add_argument("--log-level=3");
   browser = webdriver.Chrome(chrome_options=options)
-  browser.get(f"{endpoint}")
+  browser.get(f"{url}")
   start = datetime.datetime.now()
-  browser.find_element_by_id("link").send_keys(f"{link}")
-  browser.find_element_by_id("link").send_keys(Keys.RETURN)
+  browser.find_element_by_id("txt-url").send_keys(f"{link}")
+  browser.find_element_by_id("txt-url").send_keys(Keys.RETURN)
   try:
     
     element = WebDriverWait(browser, 4).until(
         EC.presence_of_element_located((By.TAG_NAME, "table")))
-    table = browser.find_elements_by_tag_name("table")[0]
+    table = browser.find_element_by_tag_name("table")
     tbody = table.find_element_by_tag_name("tbody")
     rows = tbody.find_elements_by_tag_name("tr")
     results = []
-    audios = []
     for row in rows:
       vtype = row.find_elements_by_tag_name("td")[0]
-      vsize = row.find_elements_by_tag_name("td")[1]
-      vlink = row.find_elements_by_tag_name("td")[2].find_element_by_class_name("btn").get_attribute('href')
-      results.append({"type":  vtype.text, "size": vsize.text, "link": vlink})
+      try:
+        link = row.find_element_by_class_name("txt-center")
+        if(link):
+          vlink = link.find_element_by_class_name('btn').get_attribute("data-vlink")
+          results.append({"type":  vtype.text, "vlink": vlink})
+      except:
+        pass
+
+        # print(vtype, vlink)
     end = datetime.datetime.now()
-    
+  
     print(f"video time: {end - start}")
-  finally: 
+  
+    return (results)
+  
+  except:
+    pass
+  finally:
     browser.quit()
-  return (results)
+
 
 
 def getAudio(link):
@@ -50,7 +60,7 @@ def getAudio(link):
   options.add_argument("--log-level=3");
   options.add_argument("--disable-notifications");
   browser = webdriver.Chrome(chrome_options=options)
-  browser.get(f"{endpoint}")
+  browser.get("https://youtubemp4.to/")
   start = datetime.datetime.now()
   browser.find_element_by_id("link").send_keys(f"{link}")
   browser.find_element_by_id("link").send_keys(Keys.RETURN)
@@ -69,7 +79,10 @@ def getAudio(link):
     end = datetime.datetime.now()
     
     print(f"audio time: {end - start}")
-    
-  finally:
-    browser.quit()
+  
+
+  except:
+    pass
+  finally:  
+    browser.quit() 
   return (audios)

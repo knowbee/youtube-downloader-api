@@ -6,13 +6,13 @@ app = Flask(__name__)
 cors = CORS(app)
 
 
-@app.route('/video', methods=['GET', 'POST'])
+@app.route('/video', methods=['POST'])
 @cross_origin()
 def init():
   yt_url = str(request.args.get("url"))
   return jsonify(getVideo(yt_url))  
   
-@app.route('/audio', methods=['GET', 'POST'])
+@app.route('/audio', methods=['POST'])
 @cross_origin()
 def audio():
   yt_url = str(request.args.get("url"))
