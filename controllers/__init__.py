@@ -60,7 +60,7 @@ def getAudio(link):
   options.add_argument("--log-level=3");
   options.add_argument("--disable-notifications");
   browser = webdriver.Chrome(chrome_options=options)
-  browser.get("https://youtubemp4.to/")
+  browser.get(f"{url}")
   start = datetime.datetime.now()
   browser.find_element_by_id("link").send_keys(f"{link}")
   browser.find_element_by_id("link").send_keys(Keys.RETURN)
